@@ -1,0 +1,5 @@
+_poolManagerId,_userId,_metaHash,_country,_onBoardTime,_wallet,_status,result
+cSigmaPollManager01,cSigmaLenderId01,temphash,Us,8/18/2023 16:02,0xc96Be35EbBdCB7aCa63FE4Ef47E9f3aA14cDfB6e,1,pool manager already exist
+cSigmaPollManager02,cSigmaLenderId02,temphash,Uk,8/18/2023 16:02,0xc96Be35EbBdCB7aCa63FE4Ef47E9f3aA14cDfB6e,1,pool manager already exist
+cSigmaPollManager03,cSigmaLenderId03,temphash,IN,8/18/2023 16:02,0xc96Be35EbBdCB7aCa63FE4Ef47E9f3aA14cDfB6e,1,pool manager already exist
+cSigmaPollManager04,cSigmaLenderId04,temphash,IN,8/18/2023 16:02,0xc96Be35EbBdCB7aCa63FE4Ef47E9f3aA14cDfB6e,1,pool manager already exist

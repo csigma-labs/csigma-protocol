@@ -1,0 +1,5 @@
+_creditPoolId,_poolManagerId,_metaHash,_borrowingAmount,_inceptionTime,_expiryTime,_curingPeriod,_status,result
+cSigmaPool01,cSigmaPollManager02,tempshash,100,10,10000,100,1,credit pool already exist
+cSigmaPool01,cSigmaPollManager02,tempshash,100,10,10000,100,1,credit pool already exist
+cSigmaPool02,cSigmaPollManager03,tempshash,100,10,10000,100,1,credit pool already exist
+cSigmaPool04,cSigmaPollManager10,tempshash,100,10,10000,100,1,credit pool already exist
