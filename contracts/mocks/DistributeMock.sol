@@ -31,8 +31,9 @@ contract DistributeMock {
 
   event Exit(string indexed roleId, string poolId, uint256 amount);
   event Fee(string indexed poolId, uint256 amount);
-  event WithdrawRequest(string indexed roleId, address token, uint256 amount);
-  event ReceiveRequest(string indexed roleId, string poolId, uint256 amount);
+  event WithdrawRequest(string roleId, address token, uint256 amount);
+  event ReceiveRequest(string roleId, string poolId, uint256 amount);
+  event AuthorizationUsed(address indexed authorizer, Request request);
 
   function getChainId() external view returns (uint256) {
         uint256 id;

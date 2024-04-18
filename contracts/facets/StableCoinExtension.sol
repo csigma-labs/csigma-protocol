@@ -21,7 +21,7 @@ library StableCoinLib {
         mapping (string => address) poolToken;
         mapping (address => bool) isWhitelisted;
         mapping (string => mapping (address => uint256)) stableCoinBalance;
-        mapping (address => address) requestedToken;
+        mapping (string => address) requestedToken;
         mapping (string => address) paymentStableCoin;
         mapping (string => uint256) paidBalance;
         mapping (string => uint64) lastWithdrawalTimeStamp;
@@ -61,11 +61,11 @@ library StableCoinLib {
         return stableCoinState.stableCoinBalance[_roleId][_token];
     }
 
-    /// @dev Returns address of stable coin requested to be withdrawn by given wallet address
-    /// @param _reqWallet Wallet address who requested given tokens to be withdrawn from vault 
-    function getRequestedToken(address _reqWallet) internal view returns (address) {
+    /// @dev Returns address of stable coin requested to be withdrawn by given roleId
+    /// @param _roleId RoleId associated with given vault account 
+    function getRequestedToken(string memory _roleId) internal view returns (address) {
         StableCoinState storage stableCoinState = diamondStorage();
-        return stableCoinState.requestedToken[_reqWallet];
+        return stableCoinState.requestedToken[_roleId];
     }
 
     /// @dev Returns address of stable coin associated with given payment
@@ -235,14 +235,14 @@ library StableCoinLib {
         stableCoinState.lastWithdrawalTimeStamp[_roleId] = _timeStamp;
     }
 
-    /// @dev Binds requested stable coin information with given wallet address
+    /// @dev Binds requested stable coin information with given roleId
     /// @notice Called internally whenever given wallet requests to withdraw stable coin
-    /// @param _reqWallet Wallet address who requested given tokens to be withdrawn from vault
+    /// @param _roleId LenderId who requested given tokens to be withdrawn from vault
     /// @param _token Address of requested stable coin
-    function addRequestedToken(address _reqWallet, address _token) internal {
+    function addRequestedToken(string calldata _roleId, address _token) internal {
         VaultLib.enforceIsVault();
         StableCoinState storage stableCoinState = diamondStorage();
-        stableCoinState.requestedToken[_reqWallet] = _token;
+        stableCoinState.requestedToken[_roleId] = _token;
     }
 
     /// @dev Binds stable coin information with given payment
@@ -287,10 +287,10 @@ contract StableCoinExtension {
         return StableCoinLib.getStableCoinBalance(_roleId, _token);
     }
 
-    /// @dev Returns address of stable coin requested to be withdrawn by given wallet address
-    /// @param _reqWallet Wallet address who requested given tokens to be withdrawn from vault 
-    function getRequestedToken(address _reqWallet) external view returns (address) {
-        return StableCoinLib.getRequestedToken(_reqWallet);
+    /// @dev Returns address of stable coin requested to be withdrawn by given roleId
+    /// @param _roleId RoleId associated with given vault account 
+    function getRequestedToken(string memory _roleId) external view returns (address) {
+        return StableCoinLib.getRequestedToken(_roleId);
     }
 
     /// @dev Returns address of stable coin associated with given payment

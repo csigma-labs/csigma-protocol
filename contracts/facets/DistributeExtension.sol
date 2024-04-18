@@ -35,6 +35,8 @@ library DistributeLib {
         VaultLib.PaymentInfo[] paymentInfo;
     }
 
+    event AuthorizationUsed(address indexed authorizer, Request request);
+
     /// @dev Returns storage position of distribute library inside diamond
     function diamondStorage() internal pure returns (DistributeState storage ds) {
         bytes32 position = DIAMOND_STORAGE_POSITION;
@@ -139,7 +141,8 @@ library DistributeLib {
         distributeState.usedNonces[_signer][_request.nonce] = true;
         distributeState.isDistributeCall = true;
         VaultLib.distribute(_request.roleId, _request.poolId, _request.paymentInfo);
-        distributeState.isDistributeCall = false; 
+        distributeState.isDistributeCall = false;
+        emit AuthorizationUsed(_signer, _request);
     }
 
     /// @dev Throws error if called by other than distribute library
@@ -156,7 +159,7 @@ contract DistributeFacet {
     event Distribute(string indexed roleId, string poolId, VaultLib.PaymentInfo[] paymentInfo);
     event Withdraw(string indexed roleId, uint256 amount);
     event WithdrawStableCoin(string indexed roleId, address token, uint256 amount);
-    event WithdrawRequest(string indexed roleId, address token, uint256 amount);
+    event WithdrawRequest(string roleId, address token, uint256 amount);
     
     /// @dev Returns the state of an authorization,
     //       more specifically if the specified nonce was already used by the address specified

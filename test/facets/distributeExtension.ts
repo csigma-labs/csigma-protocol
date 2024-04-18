@@ -178,6 +178,19 @@ describe('DistributeExtensionTest', async function () {
                 await distributeExtension.withdrawPoolPaymentIntoWallet(message, r, s, v, paymentToken.address, 10);
                 expect(await paymentToken.balanceOf(lenderWallet.address)).to.be.equal(Number(prevBal) + 10);               
             })
+            it("should emit authorization used event", async function() {
+                await stableCoinExtension.updateLenderThreshold(100);
+                message = {nonce: 3, roleId: id1, poolId: poolId1, paymentInfo: [{amount: 10, paymentType: PaymentType.COUPON}],};
+                const signature = await addr2._signTypedData(domainData, types, message);
+                r = signature.substring(0, 66);
+                s = "0x" + signature.substring(66, 130);
+                v = parseInt(signature.substring(130, 132), 16);
+                distributeExtension = await ethers.getContractAt('DistributeMock', diamondAddress, lenderWallet);
+                await expect(distributeExtension.withdrawPoolPaymentIntoVault(message, r, s, v))
+                .to.emit(distributeExtension, "AuthorizationUsed")
+                .withArgs(addr2.address, []);
+                // https://github.com/NomicFoundation/hardhat/issues/3833
+            })
         })  
     })
 })

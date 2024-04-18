@@ -662,7 +662,7 @@ describe('StableCoinExtensionTest', async function () {
             await vaultFacetExtension.withdrawRequest(id1, poolToken.address, 100);    
         })
         it("should bind stable coin with request wallet", async function() {
-            expect(await stableCoinExtension.getRequestedToken(lenderWallet.address)).to.be.equal(poolToken.address);
+            expect(await stableCoinExtension.getRequestedToken(id1)).to.be.equal(poolToken.address);
         })          
     })
 

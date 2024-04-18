@@ -360,7 +360,7 @@ library VaultLib {
             }
             uint256 _reqIndex = vaultState.requests.length;
             vaultState.requests.push(Request(_roleId, new string(0), msg.sender, RequestType.WITHDRAW, _amount));
-            StableCoinLib.addRequestedToken(msg.sender, _token);
+            StableCoinLib.addRequestedToken(_roleId, _token);
             vaultState.pendingRequest[_roleId] = RequestStatus(true, _reqIndex);
         }
         vaultState.isVaultCall = false;
@@ -389,7 +389,7 @@ library VaultLib {
                 _request.amount
             );
             LenderLib.addPaymentId(_request.roleId, _paymentId);
-            address _token = StableCoinLib.getRequestedToken(_request.wallet);
+            address _token = StableCoinLib.getRequestedToken(_request.roleId);
             if(_token == vaultState.paymentToken) {
                 vaultState.vaultBalance[_request.roleId] -= _request.amount;
             } else {
@@ -688,9 +688,9 @@ contract VaultFacet {
     event Invest(string indexed roleId, string poolId, uint256 amount);
     event Withdraw(string indexed roleId, uint256 amount);
     event WithdrawStableCoin(string indexed roleId, address token, uint256 amount);
-    event WithdrawRequest(string indexed roleId, address token, uint256 amount);
+    event WithdrawRequest(string roleId, address token, uint256 amount);
     event Receive(string indexed roleId, string poolId, uint256 amount);
-    event ReceiveRequest(string indexed roleId, string poolId, uint256 amount);
+    event ReceiveRequest(string roleId, string poolId, uint256 amount);
     event Pay(string indexed roleId, string poolId, VaultLib.PaymentInfo[] paymentInfo);
     event Paused(address account);
     event Unpaused(address account);
@@ -843,7 +843,7 @@ contract VaultFacet {
     function processWithdrawRequest(uint256 _reqIndex, bool _isApproved) external {
         if(_isApproved) {
             VaultLib.Request memory _request = VaultLib.getRequestByIndex(_reqIndex);
-            address _token = StableCoinLib.getRequestedToken(_request.wallet);
+            address _token = StableCoinLib.getRequestedToken(_request.roleId);
             if(_token == VaultLib.getPaymentToken()) {
                 emit Withdraw(_request.roleId, _request.amount);
             } else {
